@@ -42,6 +42,10 @@ class BurpExtender(IBurpExtender, IHttpListener):
 
     def _extract_version(self, header_value):
         patterns = [
+            # 新增待覆盖组件
+            r'(openresty[/\s]?([\d\.]+))',   # OpenResty
+            r'(envoy/([\d\.]+))',            # Envoy
+            r'(istio/([\d\.]+))',            # Istio
             # 增强Kong版本识别
             r'(kong[/\s]?([\d\.]+))',
             # 新增常见反向代理识别
@@ -57,11 +61,12 @@ class BurpExtender(IBurpExtender, IHttpListener):
 
     def _detect_body_version(self, body):
         patterns = [
-            # 原有正则优化
+             # 常见组件正则
+            r'(spring boot/?[\d\.]+)',       
+            r'(docker distribution/?[\d\.]+)', 
             r'(nginx/?[\d\.]+)',  
             r'(apache tomcat/?[\d\.]+)',
             r'(apache/?[\d\.]+)',
-            # 新增常见组件正则
             r'(kong/?[\d\.]+)',
             r'(jetty/?[\d\.]+)',
             r'(express/?[\d\.]+)',
@@ -72,14 +77,13 @@ class BurpExtender(IBurpExtender, IHttpListener):
             r'(glassfish/?[\d\.]+)',
             r'(php/?[\d\.]+)',
             r'(wordpress/?[\d\.]+)',
-            # 新增云服务相关
             r'(aws.?elb/[\d\.]+)',
             r'(cloudfront/[\d\.]+)'
         ]
         for pattern in patterns:
-            match = re.search(pattern, body, re.IGNORECASE)  # 添加大小写不敏感
+            match = re.search(pattern, body, re.IGNORECASE)
             if match:
-                return match.group(1).upper()  # 统一转为大写
+                return match.group(1)  # 移除.upper()保留原始格式
         return None
     
     def _get_header_value(self, analyzed, header_name):
