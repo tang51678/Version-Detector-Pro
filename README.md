@@ -50,8 +50,6 @@ Burp Suite 被动式版本检测插件，自动识别HTTP响应中的中间件/�
 3. 新组件检测需求
 
 ### 待覆盖组件
-⏳ OpenResty ⏳ Envoy ⏳ Istio  
-⏳ SpringBoot ⏳ Docker Distribution
+⏳ 等待各位看官补充
 
-## 📜 开源协议
-MIT License - 详情见LICENSE文件
+
